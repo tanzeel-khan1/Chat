@@ -1,23 +1,3 @@
-// import React from 'react'
-// import Cookies from 'js-cookie'
-// import { useContext } from 'react';
-
-// export const AuthContext = React.createContext();
-
-// export const AuthProvider = ({children}) => {
-//     const inatialState =  Cookies.get("jwt") || localStorage.getItem("userInfo")
-
-//     const [authUser, setAuthUser] = React.useState(inatialState ? JSON.parse(inatialState) : undefined);
-//   return (
-//     <>
-//       <AuthContext.Provider value={{authUser, setAuthUser}}>
-//         {children}
-//       </AuthContext.Provider>
-//     </>
-//   )
-// }
-
-// export  const useAuth = () => React.useContext(AuthContext);
 import React from "react";
 import Cookies from "js-cookie";
 
