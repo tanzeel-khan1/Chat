@@ -23,6 +23,7 @@ const Logout = () => {
     } catch (error) {
       console.log("Logout error:", error);
     } finally {
+      
       setLoading(false);
     }
   };
