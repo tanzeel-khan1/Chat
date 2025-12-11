@@ -1,36 +1,34 @@
 import mongoose from "mongoose";
 
-const messageSchema = mongoose.Schema({
-  Sender: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-    required: true,
+const messageSchema = new mongoose.Schema(
+  {
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    receiver: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      // required: true,
+    },
+    message: {
+      type: String,
+      required: true,
+      maxlength: 1000,
+      trim: true,
+      validate: [
+        {
+          validator: (value) => value.length > 0,
+          message: "Message cannot be empty",
+        },
+      ],
+    },
   },
-  receiver: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-    required: true,
-  },
-  message: {
-    type: String,
-    required: true,
-    maxlength: 1000,
-    trum: true,
-    Validite: [
-      {
-        validator: (value) => value.length > 0,
-        message: "Message cannot be empty",
-      },
-      // {
-      //     validator: (value) => /^[a-zA-Z0-9\s]*5$/.test(value),
-      //     message: "Message can only contain alphanumic  charactors & spaces"
+  {
+    timestamps: true,
+  }
+);
 
-      // },
-    ],
-  },
-  createdAt: { type: Date, default: Date.now },
-  timestamps: true
-});
-
-const Message = mongoose.model("message",messageSchema)
+const Message = mongoose.model("Message", messageSchema);
 export default Message;
