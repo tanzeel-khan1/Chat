@@ -44,17 +44,34 @@ export const sendMessages = async (req, res) => {
       message: "Message sent successfully",
       data: newMessage,
     });
-
   } catch (error) {
     console.error("Error in sendMessages:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getAll = async (req,res) => {
-  try{
+export const getAllMessages = async (req, res) => {
+  try {
+    const { id: chatuser } = req.params;
 
+    // 🔴 safety check
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const senderId = req.user._id;
+
+    const conversation = await Conversation.findOne({
+      participants: { $all: [senderId, chatuser] },
+    }).populate("messages");
+
+    if (!conversation) {
+      return res.status(404).json({ message: "No Messages Found" });
+    }
+
+    res.status(200).json({ messages: conversation.messages });
   } catch (error) {
-    console.log("Message getting error",)
+    console.log("Message getting error", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
