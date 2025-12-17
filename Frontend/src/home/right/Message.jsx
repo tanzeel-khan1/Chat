@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Messages from "./Messages";
 import useGetMessages from "../../context/useGetMessages";
-import Loading from "../../components/Loading"
+import Loading from "../../components/Loading";
 
 const Message = () => {
   const { messages, loading } = useGetMessages(); // lowercase
+  const lastmessageRef = useRef();
+  useEffect(() => {
+    setTimeout(() => {
+      if (lastmessageRef.current) {
+        lastmessageRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  }, [messages]);
 
-  console.log(messages);
+  if (messages.length > 0) {
+    messages.forEach((msg, index) => {
+      console.log(`Message ${index + 1}:`, {
+        id: msg._id,
+        sender: msg.sender?._id || msg.sender,
+        message: msg.message,
+        receiver: msg.receiver,
+      });
+    });
+  }
 
   return (
     <>

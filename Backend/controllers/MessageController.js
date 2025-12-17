@@ -3,7 +3,8 @@ import Message from "../models/MessageModal.js";
 
 export const sendMessages = async (req, res) => {
   try {
-    const { message, receiverId } = req.body;
+    const { message } = req.body;
+    const receiverId = req.params.id; // ✅ URL se
     const senderId = req.user._id;
 
     // ✅ Validation
@@ -11,16 +12,20 @@ export const sendMessages = async (req, res) => {
       return res.status(400).json({ message: "Receiver ID is required" });
     }
 
+    if (senderId.toString() === receiverId.toString()) {
+      return res.status(400).json({
+        message: "Sender and receiver cannot be the same",
+      });
+    }
+
     if (!message || !message.trim()) {
       return res.status(400).json({ message: "Message is required" });
     }
 
-    // Step 1: Find existing conversation
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
     });
 
-    // Step 2: Create conversation if not exists
     if (!conversation) {
       conversation = await Conversation.create({
         participants: [senderId, receiverId],
@@ -28,14 +33,12 @@ export const sendMessages = async (req, res) => {
       });
     }
 
-    // Step 3: Create message (receiver will be saved now ✅)
     const newMessage = await Message.create({
       sender: senderId,
       receiver: receiverId,
       message: message.trim(),
     });
 
-    // Step 4: Push message ID into conversation
     conversation.messages.push(newMessage._id);
     await conversation.save();
 
@@ -63,13 +66,48 @@ export const getAllMessages = async (req, res) => {
 
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, chatuser] },
-    }).populate("messages");
+    }).populate({
+      path: "messages",
+      populate: [
+        {
+          path: "sender",
+          select: "_id name email",
+        },
+        {
+          path: "receiver",
+          select: "_id name email",
+        },
+      ],
+    });
+
+    console.log("Conversation found:", conversation ? "Yes" : "No");
+    if (conversation) {
+      // console.log("Messages count in conversation:", conversation.messages?.length || 0);
+      if (conversation.messages && conversation.messages.length > 0) {
+        console.log("First message:", {
+          id: conversation.messages[0]._id,
+          sender:
+            conversation.messages[0].sender?._id ||
+            conversation.messages[0].sender,
+          receiver:
+            conversation.messages[0].receiver?._id ||
+            conversation.messages[0].receiver,
+          message: conversation.messages[0].message,
+        });
+      }
+    }
 
     if (!conversation) {
       return res.status(404).json({ message: "No Messages Found" });
     }
 
-    res.status(200).json({ messages: conversation.messages });
+    const sortedMessages = conversation.messages.sort((a, b) => {
+      const dateA = new Date(a.createdAt || a.createdAt);
+      const dateB = new Date(b.createdAt || b.createdAt);
+      return dateA - dateB;
+    });
+
+    res.status(200).json({ messages: sortedMessages });
   } catch (error) {
     console.log("Message getting error", error);
     res.status(500).json({ error: "Internal Server Error" });
