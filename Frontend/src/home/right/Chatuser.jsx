@@ -1,34 +1,3 @@
-// import React from "react";
-// import useConversation from "../../stateman/useConversation.js";
-// import { useSocketContext } from "../../context/SocketContext.jsx";
-
-// const Chatuser = () => {
-//   const { selectedConversation } = useConversation();
-//   console.log("new", selectedConversation);
-//     const isOnline = onlineUsers?.includes(String(user._id));
-//   const { onlineUsers } = useSocketContext();
-//   const getOnlineUserStatus =(userId) => {
-//     return onlineUsers.includes(userId) ? "online": "offline"
-//   }
-
-//   return (
-//     <div className=" p-3 flex h-[12vh] bg-gray-900 hover:bg-gray-600 duration-300 cursor-pointer">
-//       <div class="avatar avatar-online">
-//         <div  className={`absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-white ${
-//               isOnline ? "bg-green-500" : "bg-gray-400"
-//             }`}>
-//           <img src="./avater.png" />
-//         </div>
-//       </div>
-//       <div>
-//         <h1 className="text-xl">{selectedConversation.name} </h1>
-//         <span className="text-sm">{getOnlineUserStatus(selectedConversation._id)}</span>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Chatuser;
 import React from "react";
 import useConversation from "../../stateman/useConversation.js";
 import { useSocketContext } from "../../context/SocketContext.jsx";
@@ -44,7 +13,7 @@ const Chatuser = () => {
   );
 
   return (
-    <div className="p-3 flex items-center gap-3 h-[12vh] bg-gray-900 hover:bg-gray-600 duration-300 cursor-pointer">
+    <div className="p-3 flex items-center gap-3 h-[12vh] bg-[#071952] hover:bg-gray-600 duration-300 cursor-pointer">
       
       {/* Avatar */}
       <div className="relative">

@@ -4,7 +4,7 @@ import axios from "axios";
 
 const useSendMessage = () => {
   const [loading, setLoading] = useState(false);
-  const { messages, setMessages, selectedConversation } = useConversation();
+  const { messages, setMessages, addMessage, selectedConversation } = useConversation();
 
   const sendMessages = async (message) => {
     if (!message || !selectedConversation?._id) return;
@@ -16,8 +16,12 @@ const useSendMessage = () => {
         { message }
       );
 
-      // ✅ safe state update
-      setMessages((prev) => [...prev, response.data]);
+      // ✅ Add new message to existing messages
+      if (response.data?.data) {
+        addMessage(response.data.data);
+      } else if (response.data) {
+        addMessage(response.data);
+      }
 
     } catch (error) {
       console.log("Error sending message:", error);

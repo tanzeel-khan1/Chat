@@ -1,74 +1,3 @@
-// import React, { useEffect, useRef } from "react";
-// import Messages from "./Messages";
-// import useGetMessages from "../../context/useGetMessages";
-// import Loading from "../../components/Loading";
-// import useGetSocketMessage from "../../context/useGetSocketMessage";
-
-// // const Message = () => {
-// //   const { messages, loading } = useGetMessages();
-// //   useGetSocketMessage()
-// //   const lastMessageRef = useRef(null);
-
-// //   useEffect(() => {
-// //     if (messages.length > 0) {
-// //       lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
-// //     }
-// //   }, [messages]);
-
-// //   if (loading) return <Loading />;
-
-// //   return (
-// //     <>
-// //       {messages.length > 0 ? (
-// //         messages.map((message, index) => (
-// //           <div
-// //             key={message._id}
-// //             ref={index === messages.length - 1 ? lastMessageRef : null}
-// //           >
-// //             <Messages message={message} />
-// //           </div>
-// //         ))
-// //       ) : (
-// //         <div className="min-h-[80vh] flex items-center justify-center">
-// //           <p className="font-bold">hi</p>
-// //         </div>
-// //       )}
-// //     </>
-// //   );
-// // };
-// const Message = () => {
-//   const { messages, loading } = useGetMessages();
-//   useGetSocketMessage(); // 🔥 now safe
-
-//   const lastMessageRef = useRef(null);
-
-//   useEffect(() => {
-//     lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
-//   }, [messages]);
-
-//   if (loading) return <Loading />;
-
-//   return (
-//     <>
-//       {messages.length > 0 ? (
-//         messages.map((message, index) => (
-//           <div
-//             key={message._id}
-//             ref={index === messages.length - 1 ? lastMessageRef : null}
-//           >
-//             <Messages message={message} />
-//           </div>
-//         ))
-//       ) : (
-//         <div className="min-h-[80vh] flex items-center justify-center">
-//           <p className="font-bold">hi</p>
-//         </div>
-//       )}
-//     </>
-//   );
-// };
-
-// export default Message;
 import React, { useEffect, useRef } from "react";
 import Messages from "./Messages";
 import useGetMessages from "../../context/useGetMessages";
@@ -77,8 +6,8 @@ import useGetSocketMessage from "../../context/useGetSocketMessage";
 import useConversation from "../../stateman/useConversation";
 
 const Message = () => {
-  const { messages = [] } = useConversation(); // ✅ yahan se messages
-  const { loading } = useGetMessages();        // ✅ sirf loading
+  const { messages = [] } = useConversation(); 
+  const { loading } = useGetMessages();        
   useGetSocketMessage();
 
   const lastMessageRef = useRef(null);
@@ -95,14 +24,27 @@ const Message = () => {
 
   if (!loading && messages.length === 0) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center">
-        <p className="opacity-60">No messages yet</p>
+      <div
+        className="min-h-[80vh] flex items-center justify-center p-4 bg-black"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        <p className="opacity-60 text-white">No messages yet</p>
+        <style>
+          {`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}
+        </style>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col">
+    <div
+      className="flex flex-col bg-black min-h-[80vh] p-4"
+      style={{ overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}
+    >
       {messages.map((message, index) => (
         <div
           key={message._id || index}
@@ -111,6 +53,13 @@ const Message = () => {
           <Messages message={message} />
         </div>
       ))}
+      <style>
+        {`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
     </div>
   );
 };

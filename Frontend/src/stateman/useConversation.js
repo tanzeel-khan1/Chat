@@ -14,6 +14,11 @@ const useConversation = create((set) => ({
     set({
       messages: Array.isArray(messages) ? messages : [], // 🔒 safety
     }),
+
+  addMessage: (newMessage) =>
+    set((state) => ({
+      messages: [...state.messages, newMessage],
+    })),
 }));
 
 export default useConversation;
