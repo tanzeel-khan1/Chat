@@ -2,48 +2,65 @@ import React, { useEffect, useRef } from "react";
 import Messages from "./Messages";
 import useGetMessages from "../../context/useGetMessages";
 import Loading from "../../components/Loading";
+import useGetSocketMessage from "../../context/useGetSocketMessage";
+import useConversation from "../../stateman/useConversation";
 
 const Message = () => {
-  const { messages, loading } = useGetMessages(); // lowercase
-  const lastmessageRef = useRef();
+  const { messages = [] } = useConversation(); 
+  const { loading } = useGetMessages();        
+  useGetSocketMessage();
+
+  const lastMessageRef = useRef(null);
+
   useEffect(() => {
-    setTimeout(() => {
-      if (lastmessageRef.current) {
-        lastmessageRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
+    if (messages.length > 0) {
+      lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
-  if (messages.length > 0) {
-    messages.forEach((msg, index) => {
-      console.log(`Message ${index + 1}:`, {
-        id: msg._id,
-        sender: msg.sender?._id || msg.sender,
-        message: msg.message,
-        receiver: msg.receiver,
-      });
-    });
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!loading && messages.length === 0) {
+    return (
+      <div
+        className="min-h-[80vh] flex items-center justify-center p-4 bg-black"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        <p className="opacity-60 text-white">No messages yet</p>
+        <style>
+          {`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}
+        </style>
+      </div>
+    );
   }
 
   return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : (
-        messages.length > 0 &&
-        messages.map((message) => {
-          return <Messages key={message._id} message={message} />;
-        })
-      )}
-
-      <div style={{ minHeight: "calc(90vh - 10vh)" }}>
-        {!loading && messages.length === 0 && (
-          <div>
-            <p className="text-center font-bold mt-[40%]"> hi</p>
-          </div>
-        )}
-      </div>
-    </>
+    <div
+      className="flex flex-col bg-black min-h-[80vh] p-4"
+      style={{ overflowY: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}
+    >
+      {messages.map((message, index) => (
+        <div
+          key={message._id || index}
+          ref={index === messages.length - 1 ? lastMessageRef : null}
+        >
+          <Messages message={message} />
+        </div>
+      ))}
+      <style>
+        {`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
+    </div>
   );
 };
 

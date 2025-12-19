@@ -13,20 +13,20 @@ export default function Right() {
   }, []);
 
   return (
-    <div className="w-[70%] bg-slate-950 text-white">
+    <div className="w-[70%] h-screen flex flex-col bg-slate-950 text-white">
       {!selectedConversation ? (
         <NoChat />
       ) : (
         <>
+          {/* Header */}
           <Chatuser />
 
-          <div
-            className="flex-babar overflow-y-auto"
-            style={{ maxHeight: "calc(88vh - 8vh)" }}
-          >
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto">
             <Message />
           </div>
 
+          {/* Input */}
           <Type />
         </>
       )}
@@ -38,9 +38,9 @@ const NoChat = () => {
   const { authUser } = useAuth();
 
   return (
-    <div className="flex items-center justify-center h-full">
+    <div className="flex-1 flex items-center justify-center">
       <h1 className="text-center text-gray-400">
-        Welcome {authUser?.user?.name || "Guest"}, 
+        Welcome {authUser?.user?.name || "Guest"},
         <br />
         select a chat to start messaging
       </h1>
