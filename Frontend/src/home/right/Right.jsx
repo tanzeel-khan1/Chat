@@ -14,20 +14,17 @@ export default function Right({ setShowSidebar }) {
   }, []);
 
   return (
-    <div className="w-full md:w-[70%] h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
+    <div className="w-full md:w-[70%] h-screen flex flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden">
       {!selectedConversation ? (
         <NoChat setShowSidebar={setShowSidebar} />
       ) : (
         <>
-          {/* Header */}
           <Chatuser setShowSidebar={setShowSidebar} />
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto">
             <Message />
           </div>
 
-          {/* Input */}
           <Type />
         </>
       )}
@@ -50,10 +47,10 @@ const NoChat = ({ setShowSidebar }) => {
         </button>
       </div>
       
-      <h1 className="text-center text-gray-400 text-base md:text-lg px-4">
-        Welcome {authUser?.user?.name || "Guest"},
+      <h1 className="text-center text-slate-400 text-base md:text-lg px-4">
+        Welcome <span className="text-blue-400 font-semibold">{authUser?.user?.name || "Guest"}</span>,
         <br />
-        select a chat to start messaging
+        <span className="text-slate-500">select a chat to start messaging</span>
       </h1>
     </div>
   );

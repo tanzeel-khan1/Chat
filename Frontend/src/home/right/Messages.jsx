@@ -11,8 +11,8 @@ const Messages = ({ message }) => {
   const itsme = String(senderId) === String(currentUserId);
 
   const chatColor = itsme
-    ? "bg-[#272A35] text-white"
-    : "bg-[#0766AD] text-white";
+    ? "bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg"
+    : "bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/30";
 
   const roundedClass = itsme
     ? "rounded-xl rounded-br-none"

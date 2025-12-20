@@ -23,8 +23,10 @@ const Users = ({ user, setShowSidebar }) => {
   return (
     <div
       onClick={handleUserClick}
-      className={`cursor-pointer duration-300 ${
-        isSelected ? "bg-slate-900" : "hover:bg-slate-600"
+      className={`cursor-pointer duration-300 transition-all ${
+        isSelected 
+          ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-l-4 border-blue-500" 
+          : "hover:bg-slate-700/50"
       }`}
     >
       <div className="flex items-center space-x-3 md:space-x-4 px-4 md:px-6 py-3 md:py-4">
@@ -35,15 +37,15 @@ const Users = ({ user, setShowSidebar }) => {
             alt="avatar"
           />
           <span
-            className={`absolute bottom-0.5 right-0.5 md:bottom-1 md:right-1 w-3 h-3 md:w-4 md:h-4 rounded-full border-2 border-white ${
-              isOnline ? "bg-green-500" : "bg-gray-400"
+            className={`absolute bottom-0.5 right-0.5 md:bottom-1 md:right-1 w-3 h-3 md:w-4 md:h-4 rounded-full border-2 border-slate-800 ${
+              isOnline ? "bg-green-400 shadow-lg shadow-green-400/50" : "bg-slate-500"
             }`}
           />
         </div>
 
         <div className="flex-1 min-w-0">
           <h1 className="text-base md:text-lg font-semibold text-white truncate">{user.name}</h1>
-          <span className="text-xs md:text-sm text-gray-300 truncate block">{user.email}</span>
+          <span className="text-xs md:text-sm text-slate-400 truncate block">{user.email}</span>
         </div>
       </div>
     </div>
